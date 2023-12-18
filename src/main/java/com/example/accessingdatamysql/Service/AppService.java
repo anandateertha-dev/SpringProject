@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +18,13 @@ public class AppService {
     public ResponseEntity<Object> addService(User user) {
         try {
             if ((user.getName() != "") & (user.getEmail() != "")) {
-                userRepository.save(user);
-                return ResponseEntity.ok("User added");
+                User userByEmail = userRepository.findByEmail(user.getEmail());
+                if (userByEmail == null) {
+                    userRepository.save(user);
+                    return ResponseEntity.ok("User added");
+                } else {
+                    return ResponseEntity.ok("User with this email already exists!");
+                }
             } else {
                 return ResponseEntity.badRequest().body("Invalid user name or email");
             }
@@ -90,15 +94,12 @@ public class AppService {
         }
     }
 
-    public ResponseEntity<Object> getUserByEmail(String email)
-    {
+    public ResponseEntity<Object> getUserByEmail(String email) {
         try {
-            User userByEmail=userRepository.findByEmail(email);
-            if (userByEmail!=null) {
+            User userByEmail = userRepository.findByEmail(email);
+            if (userByEmail != null) {
                 return ResponseEntity.ok(userByEmail);
-            }
-            else
-            {
+            } else {
                 return ResponseEntity.badRequest().body("Invalid email");
             }
         } catch (Exception e) {
