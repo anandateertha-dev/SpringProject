@@ -44,4 +44,10 @@ public class MainController {
         return service.updateById(user,id);
 
     }
+
+    @GetMapping("getbyemail/{email}")
+    public ResponseEntity<Object> getUserByEmail(@PathVariable String email)
+    {
+        return service.getUserByEmail(email);
+    }
 }

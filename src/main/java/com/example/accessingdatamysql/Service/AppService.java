@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +85,22 @@ public class AppService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id:" + id + " doesn't exist!");
             }
 
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error!");
+        }
+    }
+
+    public ResponseEntity<Object> getUserByEmail(String email)
+    {
+        try {
+            User userByEmail=userRepository.findByEmail(email);
+            if (userByEmail!=null) {
+                return ResponseEntity.ok(userByEmail);
+            }
+            else
+            {
+                return ResponseEntity.badRequest().body("Invalid email");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error!");
         }
