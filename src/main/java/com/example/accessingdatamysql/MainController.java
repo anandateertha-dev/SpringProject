@@ -23,7 +23,7 @@ public class MainController {
     public ResponseEntity<String> addNewUser(@RequestBody User user) {
 
         try {
-            if (user != null) {
+            if ((user.getName() != "")&(user.getEmail()!="")) {
                 userRepository.save(user);
                 return ResponseEntity.ok("User added");
             } else {
@@ -37,7 +37,7 @@ public class MainController {
     @GetMapping(path = "all") // Get all the user
     public ResponseEntity<Object> getAllUsers() {
         try {
-            Iterable<User> user=userRepository.findAll();
+            Iterable<User> user = userRepository.findAll();
             if (user.iterator().hasNext()) {
                 return ResponseEntity.ok(user);
             } else {
