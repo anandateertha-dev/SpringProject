@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,22 +30,39 @@ public class MainController {
                 return ResponseEntity.badRequest().body("Invalid user name or email");
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error!");
         }
     }
 
     @GetMapping(path = "all") // Get all the user
-    public @ResponseBody Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<Object> getAllUsers() {
+        try {
+            Iterable<User> user=userRepository.findAll();
+            if (user.iterator().hasNext()) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.badRequest().body("No users are present");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error!");
+        }
     }
 
     @GetMapping("byid/{id}") // Get the user with Id
-    public @ResponseBody Optional<User> getUserById(@PathVariable int id) {
-        return userRepository.findById(id);
+    public ResponseEntity<Object> getUserById(@PathVariable int id) {
+        try {
+            Optional<User> user = userRepository.findById(id);
+            if (user.isPresent()) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.badRequest().body("Invalid user name or email");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error!");
+        }
     }
 
-    @DeleteMapping("deletebyid/{id}") //Delete the user
+    @DeleteMapping("deletebyid/{id}") // Delete the user
     public ResponseEntity<String> deletebyid(@PathVariable int id) {
         try {
             Optional<User> checkUserWithId = userRepository.findById(id);
@@ -62,7 +78,7 @@ public class MainController {
         }
     }
 
-    @PutMapping("updatebyid/{id}")//Update the user
+    @PutMapping("updatebyid/{id}") // Update the user
     public ResponseEntity<String> updateById(@PathVariable int id, User user) {
 
         try {
