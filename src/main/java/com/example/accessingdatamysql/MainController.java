@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,8 +30,8 @@ public class MainController {
         return service.getAllUsers();
     }
 
-    @GetMapping("byid/{id}") // Get the user with Id
-    public ResponseEntity<Object> getUserById(@PathVariable int id) {
+    @GetMapping("byid") // Get the user with Id
+    public ResponseEntity<Object> getUserById(@RequestHeader("id") int id) {
         return service.getUserById(id);
     }
 

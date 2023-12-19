@@ -54,7 +54,7 @@ public class AppService {
             if (user.isPresent()) {
                 return ResponseEntity.ok(user);
             } else {
-                return ResponseEntity.badRequest().body("Invalid user name or email");
+                return ResponseEntity.badRequest().body("Invalid ID");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error!");
